@@ -1,0 +1,30 @@
+{
+    "configurations": [
+        {
+          "defines": [
+            "ID=\"quest-test-suite\"",
+            "VERSION=\"0.1.0\"",
+            "__aarch64__",
+            "__ANDROID__",
+            "__clang__"
+          ],
+          "includePath": [
+            "${workspaceFolder}/",
+            "/mnt/d/android-ndk-r23/sources/cxx-stl/llvm-libc++abi/include/",
+            "/mnt/d/android-ndk-r23/sources/cxx-stl/llvm-libc++/include/",
+            "/mnt/d/android-ndk-r23/sources/cxx-stl/system/include/",
+            "/mnt/d/android-ndk-r23/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/",
+            "/mnt/d/android-ndk-r23/toolchains/llvm/prebuilt/linux-x86_64/lib64/clang/12.0.5/include/",
+            "${workspaceFolder}/extern",
+            "${workspaceFolder}/extern/libil2cpp/il2cpp/libil2cpp",
+            "${workspaceFolder}/extern/codegen/include"
+        ],
+        "name": "Quest",
+        "compilerPath": "/mnt/d/android-ndk-r23/toolchains/llvm/prebuilt/linux-x86_64/bin/clang-12 -fno-ms-extensions",
+        "cStandard": "c11",
+        "cppStandard": "c++20",
+        "intelliSenseMode": "linux-clang-x64"
+        }
+    ],
+    "version": 4
+}

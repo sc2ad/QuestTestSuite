@@ -1,0 +1,30 @@
+{
+  "sharedDir": "shared",
+  "dependenciesDir": "extern",
+  "info": {
+    "name": "Quest Test Suite",
+    "id": "quest-test-suite",
+    "version": "0.1.0",
+    "url": "https://github.com/sc2ad/QuestTestSuite",
+    "additionalData": {
+      "headersOnly": true
+    }
+  },
+  "dependencies": [
+    {
+      "id": "beatsaber-hook",
+      "versionRange": "^2.3.2",
+      "additionalData": {
+        "extraFiles": [
+          "src/inline-hook"
+        ]
+      }
+    },
+    {
+      "id": "custom-types",
+      "versionRange": "^0.12.0",
+      "additionalData": {}
+    }
+  ],
+  "additionalData": {}
+}
