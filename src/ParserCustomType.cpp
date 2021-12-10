@@ -42,7 +42,7 @@ namespace Tester {
                     getLogger().info("Match found for line: %s", line.c_str());
                     co_yield reinterpret_cast<custom_types::Helpers::enumeratorT*>(custom_types::Helpers::CoroutineHelper::New(std::move(*opt)));
                     // TODO: Do we want to impose delays between lines here? Probably not.
-                } else if (opt = matchInMap(line, inst->parser->builtInParses, matches, inst)) {
+                } else if ((opt = matchInMap(line, inst->parser->builtInParses, matches, inst))) {
                     getLogger().info("Fallback match found for line: %s", line.c_str());
                     co_yield reinterpret_cast<custom_types::Helpers::enumeratorT*>(custom_types::Helpers::CoroutineHelper::New(std::move(*opt)));
                 } else {

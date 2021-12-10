@@ -18,7 +18,7 @@ namespace Tester {
         const char* goName = "Tester";
         using CallbackT = custom_types::Helpers::Coroutine (std::smatch const&, ParserCustomType*);
         // Strings are used for regexes here
-        using MapT = std::unordered_map<std::string, std::function<CallbackT>>;
+        using MapT = std::vector<std::pair<std::string, std::function<CallbackT>>>;
         MapT customParses;
         MapT builtInParses;
         using SignatureT = void (*)(MapT*);

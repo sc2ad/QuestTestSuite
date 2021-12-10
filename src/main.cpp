@@ -37,11 +37,43 @@ extern "C" void setup(ModInfo& info) {
 Tester::TestPathParser parser;
 static bool toLoad;
 
+#define DECLARE_BUILTIN(name, regex) \
+static auto name##_rgx = regex; \
+static custom_types::Helpers::Coroutine name(std::smatch const& matches, Tester::ParserCustomType* inst)
+
+#define BUILTIN(name) \
+std::make_pair(name##_rgx, std::function(name))
+
+DECLARE_BUILTIN(StartGame, "start the game") {
+    // A built in that ensures we have started the game. The hook to be registered here would be the health and safety one.
+    // This can simply do nothing.
+    co_return;
+}
+
+DECLARE_BUILTIN(FindComponentAndCallMethod, "find the component at path \"([^\"]+)\" of type namespace \"([^\"]+)\" and name \"([^\"]+)\" and call method \"([^\"]+)\"") {
+    auto path = matches[1].str();
+    auto typeNamespace = matches[2].str();
+    auto typeName = matches[3].str();
+    auto m = matches[4].str();
+    auto instance = CRASH_UNLESS(il2cpp_utils::RunMethodUnsafe("UnityEngine", "GameObject", "Find", il2cpp_utils::newcsstr(path)));
+    co_yield nullptr;
+    auto sysType = CRASH_UNLESS(il2cpp_utils::GetSystemType(typeNamespace, typeName));
+    auto matchingComp = CRASH_UNLESS(il2cpp_utils::RunMethodUnsafe(instance, "GetComponent", sysType));
+    CRASH_UNLESS(matchingComp);
+    co_yield nullptr;
+    auto methodToInvoke = CRASH_UNLESS(il2cpp_utils::FindMethodUnsafe(instance, m, 0));
+    CRASH_UNLESS(il2cpp_utils::RunMethod(matchingComp, methodToInvoke));
+    co_return;
+}
+
 extern "C" void init() {
     toLoad = parser.load(getDataDir(modInfo) + "testpath.feature", getLogger());
     if (!toLoad) {
         return;
     }
+    // Add our built in regexes here.
+    parser.builtInParses.push_back(BUILTIN(StartGame));
+    parser.builtInParses.push_back(BUILTIN(FindComponentAndCallMethod));
     // This is called early, but after dlopen, so the logs will be in a reasonable location.
     for (auto itr : Modloader::getMods()) {
         if (itr.second.get_loaded()) {
@@ -73,6 +105,7 @@ extern "C" void load() {
     getLogger().warning("IF YOU ARE NOT, PLEASE CONSIDER UNINSTALLING THIS MOD!");
     getLogger().warning("**************************************************************");
     if (toLoad) {
+        getLogger().info("TEST CODE FOUND!");
         // TODO: Some day we will parse the given expression in order to deduce which hook we want to install to.
         // For now, we will always start assuming we are at the health and safety screen and will move forward from there.
         custom_types::Register::AutoRegister();
